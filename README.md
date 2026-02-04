@@ -1,16 +1,69 @@
-# React + Vite
+# Frontend - Python Education Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application React moderne pour la plateforme d'education Python.
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+npm install
+```
 
-## React Compiler
+## Configuration
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Copier le fichier `.env.example` vers `.env` et configurer l'URL de l'API:
 
-## Expanding the ESLint configuration
+```bash
+cp .env.example .env
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Lancement
+
+```bash
+# Mode developpement
+npm run dev
+
+# Build production
+npm run build
+
+# Preview production
+npm run preview
+```
+
+## Structure
+
+```
+src/
+├── components/       # Composants reutilisables
+│   ├── common/      # Composants UI de base
+│   └── layout/      # Layout et navigation
+├── contexts/        # Contextes React (User, Theme)
+├── pages/           # Pages de l'application
+├── services/        # Services API
+├── utils/           # Fonctions utilitaires
+└── constants/       # Constantes
+```
+
+## Technologies
+
+- React 18
+- React Router v6
+- Tailwind CSS
+- Axios
+- Vite
+
+## Pages
+
+- `/` - Login
+- `/dashboard` - Tableau de bord
+- `/exercises` - Exercices
+- `/progression` - Progression par domaine
+- `/badges` - Collection de badges
+- `/quests` - Quetes actives et terminees
+- `/leaderboard` - Classement
+- `/profile` - Profil utilisateur
+
+## API Backend
+
+Le frontend communique avec le backend Flask sur `http://localhost:5000`.
+
+Assurez-vous que le backend est lance avant d'utiliser l'application.
