@@ -1,13 +1,30 @@
-import React from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import React from "react";
+import { Outlet, Navigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import "./Layout.css";
 
-const Layout = ({ children }) => {
+const Layout = () => {
+  const { currentUser, loading } = useUser();
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner spinner-large"></div>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="layout">
       <Navbar />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        {children}
+      <main className="main-content">
+        <Outlet />
       </main>
       <Footer />
     </div>

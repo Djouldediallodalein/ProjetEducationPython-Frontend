@@ -1,124 +1,38 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { UserProvider, useUser } from './contexts/UserContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import Layout from './components/layout/Layout';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Exercises from './pages/Exercises';
-import Progression from './pages/Progression';
-import Badges from './pages/Badges';
-import Quests from './pages/Quests';
-import Leaderboard from './pages/Leaderboard';
-import Profile from './pages/Profile';
-
-const ProtectedRoute = ({ children }) => {
-  const { currentUser, loading } = useUser();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-600">Chargement...</div>
-      </div>
-    );
-  }
-
-  return currentUser ? children : <Navigate to="/" replace />;
-};
-
-const AppRoutes = () => {
-  const { currentUser } = useUser();
-
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={currentUser ? <Navigate to="/dashboard" replace /> : <Login />}
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Dashboard />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/exercises"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Exercises />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/progression"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Progression />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/badges"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Badges />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/quests"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Quests />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/leaderboard"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Leaderboard />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Profile />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
-};
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { UserProvider } from "./contexts/UserContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import Layout from "./components/layout/Layout";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Exercises from "./pages/Exercises";
+import Progression from "./pages/Progression";
+import Badges from "./pages/Badges";
+import Quests from "./pages/Quests";
+import Leaderboard from "./pages/Leaderboard";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
-    <Router>
+    <UserProvider>
       <ThemeProvider>
-        <UserProvider>
-          <AppRoutes />
-        </UserProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="exercises" element={<Exercises />} />
+              <Route path="progression" element={<Progression />} />
+              <Route path="badges" element={<Badges />} />
+              <Route path="quests" element={<Quests />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </ThemeProvider>
-    </Router>
+    </UserProvider>
   );
 }
 
