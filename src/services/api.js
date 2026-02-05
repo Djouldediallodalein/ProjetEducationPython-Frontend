@@ -57,6 +57,8 @@ export const apiService = {
     getAll: (params) => api.get("/exercises", { params }),
     getById: (exerciseId) => api.get(`/exercises/${exerciseId}`),
     submit: (exerciseId, code) => api.post(`/exercises/${exerciseId}/submit`, { code }),
+    generate: (domaine, theme, difficulte = 1) => 
+      api.post("/exercices/generer", { domaine, theme, difficulte }),
   },
 
   progression: {
