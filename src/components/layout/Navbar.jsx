@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
+import { Sparkles } from "lucide-react";
 import "./Layout.css";
 
 const Navbar = () => {
@@ -22,8 +23,9 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/dashboard" className="navbar-logo">
-          🚀 Nexia
+        <Link to="/dashboard" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Sparkles size={24} strokeWidth={2.5} />
+          <span style={{ fontWeight: 700, letterSpacing: '0.5px' }}>Nexia</span>
         </Link>
 
         <div className={`navbar-menu ${isMenuOpen ? "active" : ""}`}>

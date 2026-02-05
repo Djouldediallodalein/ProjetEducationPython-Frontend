@@ -79,6 +79,11 @@ export const apiService = {
   leaderboard: {
     getTop: (limit = 100) => api.get("/leaderboard", { params: { limit } }),
   },
+
+  domaines: {
+    getAll: () => api.get("/domaines"),
+    getThemes: (domaineId) => api.get(`/domaines/${domaineId}/themes`),
+  },
 };
 
 export default api;
