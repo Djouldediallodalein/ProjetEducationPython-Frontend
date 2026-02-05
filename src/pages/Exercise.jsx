@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { apiService } from "../services/api";
 import { Card, Spinner, Alert } from "../components/common";
-import { ArrowLeft, Play, CheckCircle, XCircle, Lightbulb } from "lucide-react";
+import Terminal from "../components/common/Terminal";
+import { ArrowLeft, Send, Lightbulb, CheckCircle, XCircle } from "lucide-react";
 import "./Exercise.css";
 
 const Exercise = () => {
@@ -17,6 +18,7 @@ const Exercise = () => {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [showTerminal, setShowTerminal] = useState(true);
 
   useEffect(() => {
     if (!domain || !theme) {
@@ -64,8 +66,9 @@ const Exercise = () => {
         setResult({
           success: res.correct || false,
           message: res.message || "",
-          output: res.output || "",
-          expected: res.attendu || ""
+          tests_results: res.tests_results || [],
+          tests_passed: res.tests_passed || 0,
+          tests_total: res.tests_total || 0
         });
       }
     } catch (err) {
@@ -73,8 +76,9 @@ const Exercise = () => {
       setResult({
         success: false,
         message: "Erreur lors de la vérification du code.",
-        output: "",
-        expected: ""
+        tests_results: [],
+        tests_passed: 0,
+        tests_total: 0
       });
     } finally {
       setSubmitting(false);
@@ -170,17 +174,23 @@ const Exercise = () => {
               </div>
               <p className="result-message">{result.message}</p>
               
-              {result.output && (
-                <div className="result-output">
-                  <strong>Votre sortie :</strong>
-                  <pre>{result.output}</pre>
-                </div>
-              )}
-              
-              {result.expected && !result.success && (
-                <div className="result-expected">
-                  <strong>Sortie attendue :</strong>
-                  <pre>{result.expected}</pre>
+              {result.tests_results && result.tests_results.length > 0 && (
+                <div className="tests-results">
+                  <h3>Résultats des tests :</h3>
+                  {result.tests_results.map((test, idx) => (
+                    <div key={idx} className={`test-item ${test.passed ? 'test-passed' : 'test-failed'}`}>
+                      <span className="test-icon">{test.passed ? '✓' : '✗'}</span>
+                      <div className="test-details">
+                        <p className="test-description">{test.description}</p>
+                        {test.output && (
+                          <pre className="test-output">{test.output}</pre>
+                        )}
+                        {test.error && (
+                          <pre className="test-error">{test.error}</pre>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -202,14 +212,14 @@ const Exercise = () => {
             <div className="editor-header">
               <h2>💻 Votre code</h2>
               <button 
-                className="btn btn-run"
+                className="btn btn-submit"
                 onClick={handleSubmit}
                 disabled={submitting}
               >
                 {submitting ? (
                   <Spinner size={16} />
                 ) : (
-                  <Play size={20} />
+                  <Send size={20} />
                 )}
                 {submitting ? "Vérification..." : "Soumettre"}
               </button>
@@ -223,6 +233,10 @@ const Exercise = () => {
               spellCheck={false}
             />
           </Card>
+
+          <div className="terminal-card">
+            <Terminal code={code} />
+          </div>
         </div>
       </div>
     </div>
