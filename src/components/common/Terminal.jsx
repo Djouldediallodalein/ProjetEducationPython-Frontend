@@ -3,7 +3,7 @@ import { Play, Trash2, Terminal as TerminalIcon } from "lucide-react";
 import { apiService } from "../../services/api";
 import "./Terminal.css";
 
-export default function Terminal({ code }) {
+export default function Terminal({ code, domaine = "python" }) {
   const [output, setOutput] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const outputRef = useRef(null);
@@ -21,11 +21,20 @@ export default function Terminal({ code }) {
       return;
     }
 
+    // AVERTISSEMENT: Détecter si code utilise input()
+    const utiliseInput = /input\(|scanf|Scanner|prompt\(|cin\s*>>/.test(code);
+    if (utiliseInput) {
+      setOutput((prev) => prev + "ATTENTION: Votre code utilise input().\n");
+      setOutput((prev) => prev + "Le terminal ne peut pas gérer les saisies interactives.\n");
+      setOutput((prev) => prev + "Utilisez le bouton 'Soumettre' pour tester avec des valeurs prédéfinies.\n\n");
+      return;
+    }
+
     setIsRunning(true);
     setOutput((prev) => prev + "Exécution du code...\n");
 
     try {
-      const response = await apiService.terminal.execute(code);
+      const response = await apiService.terminal.execute(code, domaine);
       
       if (response.data?.success) {
         const result = response.data.data;

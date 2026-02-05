@@ -64,7 +64,7 @@ export const apiService = {
   },
 
   terminal: {
-    execute: (code) => api.post("/terminal/execute", { code }),
+    execute: (code, domaine = "python") => api.post("/terminal/execute", { code, domaine }),
   },
 
   progression: {

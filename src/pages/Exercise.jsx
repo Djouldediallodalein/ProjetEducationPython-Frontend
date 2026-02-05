@@ -271,7 +271,7 @@ const Exercise = () => {
           </Card>
 
           <div className="terminal-card">
-            <Terminal code={code} />
+            <Terminal code={code} domaine={domain} />
           </div>
         </div>
       </div>
