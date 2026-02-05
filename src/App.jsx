@@ -6,6 +6,7 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Exercises from "./pages/Exercises";
+import Exercise from "./pages/Exercise";
 import Progression from "./pages/Progression";
 import Badges from "./pages/Badges";
 import Quests from "./pages/Quests";
@@ -23,6 +24,7 @@ function App() {
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="exercises" element={<Exercises />} />
+              <Route path="exercise" element={<Exercise />} />
               <Route path="progression" element={<Progression />} />
               <Route path="badges" element={<Badges />} />
               <Route path="quests" element={<Quests />} />

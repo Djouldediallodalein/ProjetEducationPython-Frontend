@@ -50,19 +50,8 @@ const Exercises = () => {
   }, [domain, navigate]);
 
   const handleGenerateExercise = async (theme) => {
-    setGeneratingExercise(true);
-    try {
-      const response = await apiService.exercises.generate(domain, theme);
-      if (response.data?.success) {
-        console.log("✅ Exercice généré:", response.data.data);
-        alert(`Exercice généré avec succès !\n\nThème: ${theme}\n\nFonctionnalité complète à venir...`);
-      }
-    } catch (err) {
-      console.error("❌ Erreur génération:", err);
-      alert("Erreur lors de la génération de l'exercice. Réessayez.");
-    } finally {
-      setGeneratingExercise(false);
-    }
+    // Navigation vers la page d'exercice
+    navigate(`/exercise?domain=${domain}&theme=${encodeURIComponent(theme)}`);
   };
 
   if (loading) {
