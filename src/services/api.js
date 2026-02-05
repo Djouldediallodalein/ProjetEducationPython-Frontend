@@ -59,8 +59,8 @@ export const apiService = {
     submit: (exerciseId, code) => api.post(`/exercises/${exerciseId}/submit`, { code }),
     generate: (domaine, theme, difficulte = 1) => 
       api.post("/exercices/generer", { domaine, theme, difficulte }),
-    verify: (domaine, theme, code) =>
-      api.post("/exercices/verifier", { domaine, theme, code }),
+    verify: (domaine, theme, code, exercice_enonce = "", tentative = 1) =>
+      api.post("/exercices/verifier", { domaine, theme, code, exercice_enonce, tentative }),
   },
 
   terminal: {

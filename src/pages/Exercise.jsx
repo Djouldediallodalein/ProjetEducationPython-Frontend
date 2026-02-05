@@ -18,7 +18,8 @@ const Exercise = () => {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
-  const [showTerminal, setShowTerminal] = useState(true);
+  const [tentative, setTentative] = useState(1);
+  const [showCorrection, setShowCorrection] = useState(false);
 
   useEffect(() => {
     if (!domain || !theme) {
@@ -59,30 +60,51 @@ const Exercise = () => {
     setResult(null);
 
     try {
-      const response = await apiService.exercises.verify(domain, theme, code);
+      const response = await apiService.exercises.verify(
+        domain, 
+        theme, 
+        code, 
+        exercise?.enonce || "", 
+        tentative
+      );
       
       if (response.data?.success) {
         const res = response.data.data;
         setResult({
           success: res.correct || false,
           message: res.message || "",
-          tests_results: res.tests_results || [],
-          tests_passed: res.tests_passed || 0,
-          tests_total: res.tests_total || 0
+          correction_complete: res.correction_complete || "",
+          tentatives_restantes: res.tentatives_restantes || 0,
+          peut_voir_correction: res.peut_voir_correction || false,
+          tentative_actuelle: res.tentative_actuelle || tentative
         });
+        
+        // Incrémenter la tentative si incorrect
+        if (!res.correct) {
+          setTentative(prev => prev + 1);
+        }
       }
     } catch (err) {
       console.error("❌ Erreur vérification:", err);
       setResult({
         success: false,
         message: "Erreur lors de la vérification du code.",
-        tests_results: [],
-        tests_passed: 0,
-        tests_total: 0
+        tentatives_restantes: 3 - tentative,
+        peut_voir_correction: false
       });
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleVoirCorrection = () => {
+    setShowCorrection(true);
+  };
+
+  const handleReessayer = () => {
+    setTentative(1);
+    setResult(null);
+    setShowCorrection(false);
   };
 
   const handleNewExercise = () => {
@@ -168,29 +190,42 @@ const Exercise = () => {
                 ) : (
                   <>
                     <XCircle size={32} />
-                    <h2>❌ Pas tout à fait...</h2>
+                    <h2>❌ Tentative {result.tentative_actuelle}/3</h2>
                   </>
                 )}
               </div>
               <p className="result-message">{result.message}</p>
               
-              {result.tests_results && result.tests_results.length > 0 && (
-                <div className="tests-results">
-                  <h3>Résultats des tests :</h3>
-                  {result.tests_results.map((test, idx) => (
-                    <div key={idx} className={`test-item ${test.passed ? 'test-passed' : 'test-failed'}`}>
-                      <span className="test-icon">{test.passed ? '✓' : '✗'}</span>
-                      <div className="test-details">
-                        <p className="test-description">{test.description}</p>
-                        {test.output && (
-                          <pre className="test-output">{test.output}</pre>
-                        )}
-                        {test.error && (
-                          <pre className="test-error">{test.error}</pre>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+              {!result.success && result.peut_voir_correction && !showCorrection && (
+                <div className="correction-actions">
+                  <button 
+                    className="btn btn-secondary" 
+                    onClick={handleVoirCorrection}
+                    style={{ marginTop: '1rem', marginRight: '0.5rem' }}
+                  >
+                    📖 Voir la correction
+                  </button>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={handleReessayer}
+                    style={{ marginTop: '1rem' }}
+                  >
+                    🔄 Réessayer
+                  </button>
+                </div>
+              )}
+              
+              {showCorrection && (
+                <div className="correction-box">
+                  <h3>📖 Correction :</h3>
+                  <pre className="correction-text">{result.correction_complete}</pre>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={handleNewExercise}
+                    style={{ marginTop: '1rem' }}
+                  >
+                    Exercice suivant
+                  </button>
                 </div>
               )}
 

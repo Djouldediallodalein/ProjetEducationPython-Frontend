@@ -329,6 +329,38 @@
   color: #ff6b6b;
 }
 
+.correction-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.correction-box {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.correction-box h3 {
+  color: white;
+  font-size: 16px;
+  margin: 0 0 12px 0;
+}
+
+.correction-text {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px;
+  border-radius: 6px;
+  color: #a8dadc;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 @media (max-width: 1024px) {
   .exercise-content {
     grid-template-columns: 1fr;
