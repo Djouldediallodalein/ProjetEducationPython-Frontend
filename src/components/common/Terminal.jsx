@@ -1,58 +1,53 @@
-import { useState, useEffect, useRef } from "react";
-import { Play, Terminal as TerminalIcon } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Play, Trash2, Terminal as TerminalIcon } from "lucide-react";
+import { apiService } from "../../services/api";
 import "./Terminal.css";
 
-export default function Terminal({ code, onExecute }) {
+export default function Terminal({ code }) {
   const [output, setOutput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [pyodide, setPyodide] = useState(null);
+  const [isRunning, setIsRunning] = useState(false);
   const outputRef = useRef(null);
 
-  // Charger Pyodide au montage
-  useEffect(() => {
-    loadPyodide();
-  }, []);
-
-  // Auto-scroll du terminal
+  // Auto-scroll
   useEffect(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
   }, [output]);
 
-  const loadPyodide = async () => {
+  const executeCode = async () => {
+    if (!code.trim()) {
+      setOutput((prev) => prev + "⚠️  Aucun code à exécuter\n\n");
+      return;
+    }
+
+    setIsRunning(true);
+    setOutput((prev) => prev + "▶️  Exécution du code...\n");
+
     try {
-      setOutput("🔄 Chargement de l'environnement Python...\n");
-      const pyodideModule = await window.loadPyodide({
-        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/",
-      });
-
-      // Rediriger stdout
-      pyodideModule.setStdout({
-        batched: (text) => {
-          setOutput((prev) => prev + text);
-        },
-      });
-
-      // Rediriger stderr
-      pyodideModule.setStderr({
-        batched: (text) => {
-          setOutput((prev) => prev + "❌ " + text);
-        },
-      });
-
-      setPyodide(pyodideModule);
-      setOutput((prev) => prev + "✅ Prêt à exécuter du code Python !\n\n");
-      setOutput((prev) => prev + "⚠️  Note : input() n'est pas disponible dans ce terminal.\n");
-      setOutput((prev) => prev + "💡 Utilisez print() pour afficher des résultats.\n\n");
+      const response = await apiService.terminal.execute(code);
+      
+      if (response.data?.success) {
+        const result = response.data.data;
+        
+        if (result.success) {
+          setOutput((prev) => prev + result.output + "\n");
+          setOutput((prev) => prev + "✅ Exécution terminée avec succès\n\n");
+        } else {
+          setOutput((prev) => prev + "❌ Erreur d'exécution :\n");
+          setOutput((prev) => prev + result.error + "\n\n");
+        }
+      } else {
+        setOutput((prev) => prev + "❌ Erreur serveur\n\n");
+      }
     } catch (error) {
-      setOutput(
-        "❌ Erreur lors du chargement de Python : " + error.message + "\n"
-      );
+      setOutput((prev) => prev + `❌ Erreur : ${error.message}\n\n`);
+    } finally {
+      setIsRunning(false);
     }
   };
 
-  const clearTerminal = () => {
+  const clearOutput = () => {
     setOutput("");
   };
 
@@ -65,25 +60,38 @@ export default function Terminal({ code, onExecute }) {
         </div>
         <div className="terminal-actions">
           <button
-            onClick={clearTerminal}
+            onClick={clearOutput}
             className="terminal-btn terminal-btn-clear"
-            disabled={isLoading}
+            disabled={isRunning}
+            title="Effacer le terminal"
           >
+            <Trash2 size={16} />
             Effacer
           </button>
           <button
-            onClick={runCode}
+            onClick={executeCode}
             className="terminal-btn terminal-btn-run"
-            disabled={isLoading || !pyodide}
+            disabled={isRunning}
+            title="Exécuter le code (pour tester)"
           >
             <Play size={16} />
-            {isLoading ? "Exécution..." : "Exécuter"}
+            {isRunning ? "Exécution..." : "Exécuter"}
           </button>
         </div>
       </div>
 
       <div className="terminal-output" ref={outputRef}>
-        <pre>{output}</pre>
+        {output ? (
+          <pre>{output}</pre>
+        ) : (
+          <div className="terminal-empty">
+            <TerminalIcon size={48} opacity={0.3} />
+            <p>Le résultat de l'exécution apparaîtra ici</p>
+            <p className="terminal-hint">
+              💡 Utilisez "Exécuter" pour tester votre code
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

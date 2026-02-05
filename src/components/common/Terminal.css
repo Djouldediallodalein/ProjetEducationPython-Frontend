@@ -86,6 +86,27 @@
   word-wrap: break-word;
 }
 
+.terminal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  gap: 12px;
+}
+
+.terminal-empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.terminal-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
 .terminal-output::-webkit-scrollbar {
   width: 8px;
 }
@@ -101,42 +122,4 @@
 
 .terminal-output::-webkit-scrollbar-thumb:hover {
   background: #5e5e5e;
-}
-
-.terminal-input-form {
-  display: flex;
-  align-items: center;
-  margin-top: 4px;
-  animation: blink 0.5s ease-in-out;
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.terminal-prompt {
-  color: #4caf50;
-  margin-right: 8px;
-  font-weight: bold;
-}
-
-.terminal-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #d4d4d4;
-  font-family: inherit;
-  font-size: inherit;
-  padding: 0;
-}
-
-.terminal-input::selection {
-  background: #264f78;
 }

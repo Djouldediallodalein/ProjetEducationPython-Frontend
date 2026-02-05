@@ -63,6 +63,10 @@ export const apiService = {
       api.post("/exercices/verifier", { domaine, theme, code }),
   },
 
+  terminal: {
+    execute: (code) => api.post("/terminal/execute", { code }),
+  },
+
   progression: {
     get: (userId) => api.get(`/users/${userId}/progression`),
     update: (userId, data) => api.put(`/users/${userId}/progression`, data),
