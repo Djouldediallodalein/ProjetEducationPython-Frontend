@@ -6,12 +6,7 @@ export default function Terminal({ code, onExecute }) {
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [pyodide, setPyodide] = useState(null);
-  const [inputs, setInputs] = useState([]);
-  const [currentInput, setCurrentInput] = useState("");
-  const [waitingForInput, setWaitingForInput] = useState(false);
   const outputRef = useRef(null);
-  const inputRef = useRef(null);
-  const inputResolveRef = useRef(null);
 
   // Charger Pyodide au montage
   useEffect(() => {
@@ -23,14 +18,7 @@ export default function Terminal({ code, onExecute }) {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
-  }, [output, waitingForInput]);
-
-  // Focus sur l'input quand on attend une saisie
-  useEffect(() => {
-    if (waitingForInput && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [waitingForInput]);
+  }, [output]);
 
   const loadPyodide = async () => {
     try {
@@ -53,31 +41,10 @@ export default function Terminal({ code, onExecute }) {
         },
       });
 
-      // Créer une fonction input() interactive
-      pyodideModule.globals.set("__input_callback__", () => {
-        return new Promise((resolve) => {
-          inputResolveRef.current = resolve;
-          setWaitingForInput(true);
-        });
-      });
-
-      await pyodideModule.runPythonAsync(`
-import sys
-from js import __input_callback__
-
-async def input(prompt=""):
-    if prompt:
-        print(prompt, end="", flush=True)
-    result = await __input_callback__()
-    print(result)
-    return result
-
-# Remplacer la fonction input globale
-__builtins__.input = input
-      `);
-
       setPyodide(pyodideModule);
       setOutput((prev) => prev + "✅ Prêt à exécuter du code Python !\n\n");
+      setOutput((prev) => prev + "⚠️  Note : input() n'est pas disponible dans ce terminal.\n");
+      setOutput((prev) => prev + "💡 Utilisez print() pour afficher des résultats.\n\n");
     } catch (error) {
       setOutput(
         "❌ Erreur lors du chargement de Python : " + error.message + "\n"
@@ -85,48 +52,8 @@ __builtins__.input = input
     }
   };
 
-  const handleInputSubmit = (e) => {
-    e.preventDefault();
-    if (inputResolveRef.current) {
-      inputResolveRef.current(currentInput);
-      setInputs([...inputs, currentInput]);
-      inputResolveRef.current = null;
-      setCurrentInput("");
-      setWaitingForInput(false);
-    }
-  };
-
-  const runCode = async () => {
-    if (!pyodide || !code.trim()) {
-      setOutput((prev) => prev + "⚠️  Aucun code à exécuter\n");
-      return;
-    }
-
-    setIsLoading(true);
-    setOutput((prev) => prev + "▶️  Exécution du code...\n");
-    setInputs([]);
-
-    try {
-      // Exécuter le code de manière asynchrone pour supporter input()
-      await pyodide.runPythonAsync(code);
-      setOutput((prev) => prev + "\n✅ Exécution terminée avec succès !\n");
-      if (onExecute) {
-        onExecute({ success: true, output: outputRef.current.textContent });
-      }
-    } catch (error) {
-      const errorMessage = `❌ Erreur : ${error.message}\n`;
-      setOutput((prev) => prev + errorMessage);
-      if (onExecute) {
-        onExecute({ success: false, error: error.message });
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const clearTerminal = () => {
     setOutput("");
-    setInputs([]);
   };
 
   return (
@@ -157,20 +84,6 @@ __builtins__.input = input
 
       <div className="terminal-output" ref={outputRef}>
         <pre>{output}</pre>
-        {waitingForInput && (
-          <form onSubmit={handleInputSubmit} className="terminal-input-form">
-            <span className="terminal-prompt">&gt; </span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={currentInput}
-              onChange={(e) => setCurrentInput(e.target.value)}
-              className="terminal-input"
-              autoFocus
-              disabled={!waitingForInput}
-            />
-          </form>
-        )}
       </div>
     </div>
   );
