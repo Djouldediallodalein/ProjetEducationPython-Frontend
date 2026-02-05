@@ -12,12 +12,12 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   const menuItems = [
-    { path: "/dashboard", label: "Dashboard", icon: "🏠" },
-    { path: "/exercises", label: "Exercices", icon: "💻" },
-    { path: "/progression", label: "Progression", icon: "📊" },
-    { path: "/badges", label: "Badges", icon: "🏆" },
-    { path: "/quests", label: "Quêtes", icon: "⚔️" },
-    { path: "/leaderboard", label: "Classement", icon: "👑" },
+    { path: "/dashboard", label: "Dashboard", icon: "" },
+    { path: "/exercises", label: "Exercices", icon: "" },
+    { path: "/progression", label: "Progression", icon: "" },
+    { path: "/badges", label: "Badges", icon: "" },
+    { path: "/quests", label: "Quêtes", icon: "" },
+    { path: "/leaderboard", label: "Classement", icon: "" },
   ];
 
   return (
@@ -44,10 +44,10 @@ const Navbar = () => {
 
         <div className="navbar-actions">
           <Link to="/profile" className="navbar-profile">
-            👤 {currentUser?.username}
+            {currentUser?.username}
           </Link>
           <button onClick={logout} className="navbar-logout">
-            🚪 Déconnexion
+            Déconnexion
           </button>
         </div>
 

@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL = "http://localhost:5000/api";
 
 // Logging amélioré pour le debug
-console.log("🌐 API configurée sur:", API_BASE_URL);
+console.log("API configurée sur:", API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -21,7 +21,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error("❌ Erreur de requête:", error);
+    console.error("Erreur de requête:", error);
     return Promise.reject(error);
   }
 );
@@ -31,11 +31,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (!error.response) {
-      console.error("⚠️ Impossible de joindre le Backend sur", API_BASE_URL);
+      console.error("Impossible de joindre le Backend sur", API_BASE_URL);
       console.error("Vérifiez que le serveur Flask tourne sur le port 5000");
       error.message = "Impossible de contacter le serveur. Vérifiez que le backend est démarré.";
     } else {
-      console.error("❌ Erreur API:", error.response.status, error.response.data);
+      console.error("Erreur API:", error.response.status, error.response.data);
     }
     return Promise.reject(error);
   }
@@ -59,8 +59,8 @@ export const apiService = {
     submit: (exerciseId, code) => api.post(`/exercises/${exerciseId}/submit`, { code }),
     generate: (domaine, theme, difficulte = 1) => 
       api.post("/exercices/generer", { domaine, theme, difficulte }),
-    verify: (domaine, theme, code, exercice_enonce = "", tentative = 1) =>
-      api.post("/exercices/verifier", { domaine, theme, code, exercice_enonce, tentative }),
+    verify: (domaine, theme, code, exercice_enonce = "", exercice_id = "", tentative = 1) =>
+      api.post("/exercices/verifier", { domaine, theme, code, exercice_enonce, exercice_id, tentative }),
   },
 
   terminal: {

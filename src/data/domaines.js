@@ -7,7 +7,7 @@ export const domaines = {
   python: {
     id: "python",
     nom: "Python",
-    emoji: "🐍",
+    emoji: "",
     type: "Langage de programmation",
     description: "Langage polyvalent, idéal pour débuter",
     couleur: "#3776ab",
@@ -16,7 +16,7 @@ export const domaines = {
   javascript: {
     id: "javascript",
     nom: "JavaScript",
-    emoji: "⚡",
+    emoji: "",
     type: "Langage de programmation",
     description: "Le langage du web moderne",
     couleur: "#f7df1e",
@@ -25,7 +25,7 @@ export const domaines = {
   anglais: {
     id: "anglais",
     nom: "Anglais",
-    emoji: "🇬🇧",
+    emoji: "",
     type: "Langue",
     description: "La langue internationale par excellence",
     couleur: "#012169",
@@ -34,7 +34,7 @@ export const domaines = {
   mathematiques: {
     id: "mathematiques",
     nom: "Mathématiques",
-    emoji: "🔢",
+    emoji: "",
     type: "Sciences",
     description: "Logique, algèbre et raisonnement",
     couleur: "#ff6b6b",
@@ -43,7 +43,7 @@ export const domaines = {
   sql: {
     id: "sql",
     nom: "SQL",
-    emoji: "🗃️",
+    emoji: "",
     type: "Base de données",
     description: "Gérer et interroger les bases de données",
     couleur: "#00758f",
@@ -52,7 +52,7 @@ export const domaines = {
   html_css: {
     id: "html_css",
     nom: "HTML/CSS",
-    emoji: "🎨",
+    emoji: "",
     type: "Web Design",
     description: "Créer des interfaces web élégantes",
     couleur: "#e34c26",

@@ -17,12 +17,12 @@ export default function Terminal({ code }) {
 
   const executeCode = async () => {
     if (!code.trim()) {
-      setOutput((prev) => prev + "⚠️  Aucun code à exécuter\n\n");
+      setOutput((prev) => prev + "Aucun code à exécuter\n\n");
       return;
     }
 
     setIsRunning(true);
-    setOutput((prev) => prev + "▶️  Exécution du code...\n");
+    setOutput((prev) => prev + "Exécution du code...\n");
 
     try {
       const response = await apiService.terminal.execute(code);
@@ -32,16 +32,16 @@ export default function Terminal({ code }) {
         
         if (result.success) {
           setOutput((prev) => prev + result.output + "\n");
-          setOutput((prev) => prev + "✅ Exécution terminée avec succès\n\n");
+          setOutput((prev) => prev + "Exécution terminée avec succès\n\n");
         } else {
-          setOutput((prev) => prev + "❌ Erreur d'exécution :\n");
+          setOutput((prev) => prev + "Erreur d'exécution :\n");
           setOutput((prev) => prev + result.error + "\n\n");
         }
       } else {
-        setOutput((prev) => prev + "❌ Erreur serveur\n\n");
+        setOutput((prev) => prev + "Erreur serveur\n\n");
       }
     } catch (error) {
-      setOutput((prev) => prev + `❌ Erreur : ${error.message}\n\n`);
+      setOutput((prev) => prev + `Erreur : ${error.message}\n\n`);
     } finally {
       setIsRunning(false);
     }
@@ -88,7 +88,7 @@ export default function Terminal({ code }) {
             <TerminalIcon size={48} opacity={0.3} />
             <p>Le résultat de l'exécution apparaîtra ici</p>
             <p className="terminal-hint">
-              💡 Utilisez "Exécuter" pour tester votre code
+              Utilisez "Exécuter" pour tester votre code
             </p>
           </div>
         )}

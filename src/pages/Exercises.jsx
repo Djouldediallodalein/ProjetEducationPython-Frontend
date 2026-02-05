@@ -95,7 +95,7 @@ const Exercises = () => {
         
         <div className="header-content">
           <div className="domain-badge">
-            <span style={{ fontSize: '2.5rem' }}>{domainInfo?.emoji || "📚"}</span>
+            <span style={{ fontSize: '2.5rem' }}>{domainInfo?.emoji || ""}</span>
           </div>
           <div>
             <h1>{domainInfo?.nom || domain}</h1>

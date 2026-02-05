@@ -54,7 +54,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-content">
         <div className="login-header">
-          <h1 className="login-title">🚀 Nexia</h1>
+          <h1 className="login-title">Nexia</h1>
           <p className="login-subtitle">L'apprentissage universel par l'IA</p>
         </div>
 

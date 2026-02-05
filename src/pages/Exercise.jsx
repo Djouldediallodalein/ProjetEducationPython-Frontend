@@ -40,7 +40,7 @@ const Exercise = () => {
           setError("Impossible de générer l'exercice. Réessayez.");
         }
       } catch (err) {
-        console.error("❌ Erreur génération:", err);
+        console.error("Erreur génération:", err);
         setError("Erreur lors de la génération de l'exercice.");
       } finally {
         setLoading(false);
@@ -64,7 +64,8 @@ const Exercise = () => {
         domain, 
         theme, 
         code, 
-        exercise?.enonce || "", 
+        exercise?.enonce || "",
+        exercise?.id || "",
         tentative
       );
       
@@ -85,7 +86,7 @@ const Exercise = () => {
         }
       }
     } catch (err) {
-      console.error("❌ Erreur vérification:", err);
+      console.error("Erreur vérification:", err);
       setResult({
         success: false,
         message: "Erreur lors de la vérification du code.",
@@ -159,7 +160,7 @@ const Exercise = () => {
       <div className="exercise-content">
         <div className="exercise-left">
           <Card className="instruction-card">
-            <h2>📋 Consigne</h2>
+            <h2>Consigne</h2>
             <div className="instruction-text">
               {exercise?.enonce || "Résolvez cet exercice."}
             </div>
@@ -173,7 +174,7 @@ const Exercise = () => {
 
             {exercise?.indice && (
               <details className="hint-section">
-                <summary>💡 Indice</summary>
+                <summary>Indice</summary>
                 <p>{exercise.indice}</p>
               </details>
             )}
@@ -185,12 +186,12 @@ const Exercise = () => {
                 {result.success ? (
                   <>
                     <CheckCircle size={32} />
-                    <h2>✅ Bravo !</h2>
+                    <h2>Bravo !</h2>
                   </>
                 ) : (
                   <>
                     <XCircle size={32} />
-                    <h2>❌ Tentative {result.tentative_actuelle}/3</h2>
+                    <h2>Tentative {result.tentative_actuelle}/3</h2>
                   </>
                 )}
               </div>
@@ -203,21 +204,21 @@ const Exercise = () => {
                     onClick={handleVoirCorrection}
                     style={{ marginTop: '1rem', marginRight: '0.5rem' }}
                   >
-                    📖 Voir la correction
+                    Voir la correction
                   </button>
                   <button 
                     className="btn btn-primary" 
                     onClick={handleReessayer}
                     style={{ marginTop: '1rem' }}
                   >
-                    🔄 Réessayer
+                    Réessayer
                   </button>
                 </div>
               )}
               
               {showCorrection && (
                 <div className="correction-box">
-                  <h3>📖 Correction :</h3>
+                  <h3>Correction :</h3>
                   <pre className="correction-text">{result.correction_complete}</pre>
                   <button 
                     className="btn btn-primary" 
@@ -245,7 +246,7 @@ const Exercise = () => {
         <div className="exercise-right">
           <Card className="editor-card">
             <div className="editor-header">
-              <h2>💻 Votre code</h2>
+              <h2>Votre code</h2>
               <button 
                 className="btn btn-submit"
                 onClick={handleSubmit}

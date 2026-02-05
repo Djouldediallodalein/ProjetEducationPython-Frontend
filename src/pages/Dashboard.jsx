@@ -30,7 +30,7 @@ const Dashboard = () => {
           setDomaines(domainesArray.sort((a, b) => (a.popularite || 99) - (b.popularite || 99)));
         }
       } catch (err) {
-        console.error("❌ Erreur chargement domaines:", err);
+        console.error("Erreur chargement domaines:", err);
         setError("Impossible de charger le catalogue de cours. Vérifiez votre connexion.");
       } finally {
         setLoading(false);
@@ -41,7 +41,7 @@ const Dashboard = () => {
   }, []);
 
   const handleDomainSelect = (domaine) => {
-    console.log("🎯 Domaine sélectionné:", domaine.nom);
+    console.log("Domaine sélectionné:", domaine.nom);
     // TODO: Naviguer vers la page d'exercices du domaine
     navigate(`/exercises?domain=${domaine.id}`);
   };
@@ -53,12 +53,12 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>Bienvenue, {currentUser?.username} ! 👋</h1>
+        <h1>Bienvenue, {currentUser?.username} !</h1>
         <p className="dashboard-subtitle">Que souhaitez-vous apprendre aujourd'hui ?</p>
       </div>
 
       <section className="domaines-section">
-        <h2 className="section-title">📚 Choisissez votre domaine d'apprentissage</h2>
+        <h2 className="section-title">Choisissez votre domaine d'apprentissage</h2>
         
         {loading && (
           <div style={{ textAlign: 'center', padding: '2rem' }}>
@@ -124,7 +124,7 @@ const Dashboard = () => {
       </section>
 
       <section className="stats-section" style={{ marginTop: '3rem' }}>
-        <h2 className="section-title">📊 Vos statistiques</h2>
+        <h2 className="section-title">Vos statistiques</h2>
         <div className="dashboard-grid">
           <Card className="stat-card">
             <div className="stat-icon">🏆</div>
@@ -164,7 +164,7 @@ const Dashboard = () => {
       {showCustomModal && (
         <div className="modal-overlay" onClick={() => setShowCustomModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>🎨 Créer un domaine personnalisé</h2>
+            <h2>Créer un domaine personnalisé</h2>
             <p style={{ opacity: 0.8, marginBottom: '1.5rem' }}>
               Cette fonctionnalité sera disponible prochainement. Vous pourrez créer des domaines comme "Électronique", "Espagnol", "VHDL", etc.
             </p>
