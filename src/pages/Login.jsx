@@ -29,14 +29,19 @@ const Login = () => {
     setLoading(true);
 
     try {
+      let response;
       if (isRegister) {
-        await apiService.auth.register(formData.username, formData.email, formData.password);
-        const loginResponse = await apiService.auth.login(formData.username, formData.password);
-        login(loginResponse.data.user);
+        response = await apiService.auth.register(formData.username, formData.email, formData.password);
       } else {
-        const response = await apiService.auth.login(formData.username, formData.password);
-        login(response.data.user);
+        response = await apiService.auth.login(formData.username, formData.password);
       }
+      
+      // Stocker les tokens et l'utilisateur
+      const { user, access_token, refresh_token } = response.data.data;
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+      login(user);
+      
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Une erreur est survenue");
@@ -49,8 +54,8 @@ const Login = () => {
     <div className="login-container">
       <div className="login-content">
         <div className="login-header">
-          <h1 className="login-title">🎮 PyQuest</h1>
-          <p className="login-subtitle">Apprendre Python en s'amusant</p>
+          <h1 className="login-title">🚀 Nexia</h1>
+          <p className="login-subtitle">L'apprentissage universel par l'IA</p>
         </div>
 
         <Card className="login-card">

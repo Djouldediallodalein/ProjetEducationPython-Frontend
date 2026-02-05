@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>&copy; 2024 PyQuest - Apprendre Python en s'amusant</p>
+        <p>&copy; 2026 Nexia - L'apprentissage universel par l'IA</p>
         <div className="footer-links">
           <a href="https://github.com" target="_blank" rel="noopener noreferrer">
             GitHub

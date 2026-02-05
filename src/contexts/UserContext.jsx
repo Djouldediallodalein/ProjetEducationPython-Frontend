@@ -35,6 +35,8 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
   };
 
   const updateUser = (userData) => {

@@ -2,6 +2,9 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
+// Logging amélioré pour le debug
+console.log("🌐 API configurée sur:", API_BASE_URL);
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -11,13 +14,31 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (user.id) {
-      config.headers["X-User-Id"] = user.id;
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error("❌ Erreur de requête:", error);
+    return Promise.reject(error);
+  }
+);
+
+// Intercepteur de réponse pour gérer les erreurs
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (!error.response) {
+      console.error("⚠️ Impossible de joindre le Backend sur", API_BASE_URL);
+      console.error("Vérifiez que le serveur Flask tourne sur le port 5000");
+      error.message = "Impossible de contacter le serveur. Vérifiez que le backend est démarré.";
+    } else {
+      console.error("❌ Erreur API:", error.response.status, error.response.data);
+    }
+    return Promise.reject(error);
+  }
 );
 
 export const apiService = {

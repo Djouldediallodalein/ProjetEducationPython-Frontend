@@ -23,7 +23,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/dashboard" className="navbar-logo">
-          🎮 PyQuest
+          🚀 Nexia
         </Link>
 
         <div className={`navbar-menu ${isMenuOpen ? "active" : ""}`}>
